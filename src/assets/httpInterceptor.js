@@ -1,16 +1,17 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-const authStore = useAuthStore()
-const baseURL = 'http://localhost:3000'
+const baseURL = 'http://localhost:3000/api'
 
-function setHeaders(token) {
+function setHeaders() {
+    const authStore = useAuthStore()
     return {
-        headers: token ? { Authorization: 'Bearer ' + token } : {}
+        headers: authStore.isLogged ? { Authorization: 'Bearer ' + authStore.getToken } : {}
     }
 }
 
 export function handleResponse(promise) {
+    const authStore = useAuthStore()
     return promise.then(res => {
         return Promise.resolve(res.data)
     }).catch(err => {
@@ -20,9 +21,9 @@ export function handleResponse(promise) {
 }
 
 export function post(path, body) {
-    return axios.post(baseURL + path, body, setHeaders(authStore.getToken))
+    return axios.post(baseURL + path, body, setHeaders())
 }
 
 export function get(path) {
-    return axios.get(baseURL + path, setHeaders(authStore.getToken))
+    return axios.get(baseURL + path, setHeaders())
 }
