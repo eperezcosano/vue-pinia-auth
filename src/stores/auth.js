@@ -7,8 +7,8 @@ export const useAuthStore = defineStore({
         user: JSON.parse(localStorage.getItem('user'))
     }),
     actions: {
-        login(email, password) {
-            const req = post('/login', {email, password})
+        login(email, pass) {
+            const req = post('/login', {email, pass})
             return handleResponse(req).then(res => {
                 localStorage.setItem('user', JSON.stringify(res))
                 this.user = res
